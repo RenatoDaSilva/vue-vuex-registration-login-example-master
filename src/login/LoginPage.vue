@@ -58,6 +58,7 @@ export default {
   },
   created() {
     // reset login status
+    // teste Tiago
     this.logout();
   },
   methods: {
