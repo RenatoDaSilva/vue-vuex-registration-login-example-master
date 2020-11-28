@@ -95,6 +95,8 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import { CREATE_USER } from "../constants/graphql";
+import { InMemoryCache } from "apollo-cache-inmemory";
 
 export default {
   data() {
@@ -105,20 +107,35 @@ export default {
         username: "",
         password: "",
         requestBrokerStatus: false,
+        email: "renato@gmail.com",
       },
       submitted: false,
     };
   },
+  apollo: {},
   computed: {
     ...mapState("account", ["status"]),
   },
   methods: {
     ...mapActions("account", ["register"]),
     handleSubmit(e) {
+      e.preventDefault();
       this.submitted = true;
       this.$validator.validate().then((valid) => {
         if (valid) {
-          this.register(this.user);
+          console.log(CREATE_USER);
+          this.$apollo
+            .mutate({
+              mutation: CREATE_USER,
+              variables: {
+                username: this.user.username,
+                email: this.user.email,
+                password: this.user.password,
+              },
+            })
+            .then((data) => {
+              console.log(result);
+            });
         }
       });
     },
